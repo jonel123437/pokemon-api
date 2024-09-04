@@ -1,0 +1,59 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pokemon Search</title>
+    </head>
+    <style>
+        #sprites {
+            width: 20rem;
+            height: 20rem;
+            animation: float 3s ease-in-out infinite;
+            margin-top: 5rem;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        body {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+    <body>
+        <h1>Pokemon</h1>
+        <div>
+            <input id="pokemonName" type="search" placeholder="Enter Pokémon name">
+            <button id="searchButton">Search</button>
+        </div>
+        <h2>Name: <span id="pokemonResult"></span></h2>
+        <img id="sprites" src="pokemon.jpg">
+    </body>
+    <script>
+        document.getElementById('searchButton').addEventListener('click', () => {
+            const name = document.getElementById('pokemonName').value.toLowerCase();
+
+            fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('pokemonResult').textContent = data.name;
+                    document.getElementById('sprites').src = data.sprites.front_default;
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error(error);
+                    document.getElementById('pokemonResult').textContent = 'Not found';
+                    document.getElementById('sprites').src = 'pokemon.jpg';
+                });
+        });
+    </script>
+</html>
